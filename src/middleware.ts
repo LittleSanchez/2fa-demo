@@ -11,11 +11,6 @@ export default middlewareAuth((req) => {
     return NextResponse.redirect(new URL("/", req.url));
   }
 
-  // Protected routes logic example (uncomment and modify as needed)
-  // if (!isLoggedIn && pathname.startsWith("/protected/")) {
-  //   return NextResponse.redirect(new URL("/auth/login", req.url));
-  // }
-
   return NextResponse.next();
 });
 

@@ -1,58 +1,53 @@
-// import { Resend } from 'resend';
-
 import nodemailer from 'nodemailer';
 
-// const resend = new Resend(process.env.RESEND_API_KEY);
-
+/**
+ * Відправляє email з кодом верифікації для підтвердження email адреси
+ * @param email Email отримувача
+ * @param code Код верифікації
+ */
 export async function sendVerificationEmail(email: string, code: string) {
-  // await resend.emails.send({
-  //   from: 'onboarding@resend.dev',
-  //   to: email,
-  //   subject: 'Verify your email',
-  //   html: `Your verification code is: ${code}`,
-  // });
+    // Створення транспортера для відправки email через Gmail SMTP
+    const transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 587,
+        secure: false, // TLS
+        auth: {
+            user: process.env.EMAIL_USER, // Email відправника з env
+            pass: process.env.EMAIL_PASS, // Пароль з env
+        },
+    })
 
-  const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  })
-
-  await transporter.sendMail({
-    from: process.env.EMAIL_USER,
-    to: email,
-    subject: 'Verify your email',
-    text: `Your verification code is: ${code}`,
-  });
+    // Відправка email з кодом верифікації
+    await transporter.sendMail({
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: 'Verify your email',
+        text: `Your verification code is: ${code}`,
+    });
 }
 
+/**
+ * Відправляє email з одноразовим паролем (OTP) для входу
+ * @param email Email отримувача
+ * @param otp Одноразовий пароль
+ */
 export async function sendOTP(email: string, otp: string) {
-  // await resend.emails.send({
-  //   from: 'onboarding@resend.dev',
-  //   to: email,
-  //   subject: 'Verify your login',
-  //   html: `Your one-time code is: ${otp}`,
-  // })
+    // Створення транспортера для відправки email через Gmail SMTP
+    const transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 587,
+        secure: false, // TLS
+        auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS,
+        },
+    })
 
-  const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  })
-
-  await transporter.sendMail({
-    from: process.env.EMAIL_USER,
-    to: email,
-    subject: 'Verify your login',
-    text: `Your one-time code is: ${otp}`,
-  });
+    // Відправка email з OTP
+    await transporter.sendMail({
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: 'Verify your login',
+        text: `Your one-time code is: ${otp}`,
+    });
 }
-
